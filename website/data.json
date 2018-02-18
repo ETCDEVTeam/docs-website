@@ -1,0 +1,12 @@
+{
+  "projects": [
+    {
+      "id": "emerald-cli",
+      "title": "Emerald CLI",
+      "description": "Console tool to access blockchain data, manage private keys, sign and send transaction",
+      "links": {
+        "github": "https://github.com/etcdevteam/emerald-cli"
+      }
+    }
+  ]
+}

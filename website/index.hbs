@@ -1,0 +1,68 @@
+<html>
+<head>
+    <title>Documentation on ETCDEV Team</title>
+
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+
+    <link rel="stylesheet" href="assets/main.css">
+    <script src="assets/main.js"></script>
+
+</head>
+<body>
+
+    <nav class="navbar  navbar-etcdev">
+        <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">ETCDEV Documentation</a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="https://www.etcdevteam.com"><i class="fa fa-github"></i> Website</a></li>
+                    <li><a href="https://github.com/etcdevteam"><i class="fa fa-github"></i> Github</a></li>
+                </ul>
+            </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+    </nav>
+
+    <div class="container container-header">
+
+        <div class="page-header">
+          <h1>Documentation <small>ETCDEV</small></h1>
+          <p>Documentation for Ethereum Classic (ETC) project that are developed or maintained by ETCDEV Team</p>
+        </div>
+    </div>
+
+    <div class="container">
+        {{#each projects}}
+        <div class="row">
+            <div class="col-xs-12">
+                <h3>{{title}}</h3>
+            </div>
+            <div class="col-xs-6">
+                <p>{{description}}</p>
+            </div>
+            <div class="col-xs-6">
+                <ul class="list-unstyled">
+                    <li><a href="/html/{{id}}/"><i class="fa fa-chrome"></i> HTML Documentation</a></li>
+                    <li><a href="/pdf/{{id}}.pdf"><i class="fa fa-file-pdf-o"></i> PDF Documentation</a></li>
+                    <li><a href="/epub/{{id}}.epub"><i class="fa fa-book"></i> ePUB Documentation</a></li>
+                    <li><hr/></li>
+                    <li><a href="{{links.github}}"><i class="fa fa-github"></i> Github</a></li>
+                </ul>
+            </div>
+        </div>
+        {{/each}}
+    </div>
+</body>
+</html>
