@@ -10,6 +10,7 @@ GIT_REMOTE_BASE_URL=$GIT_REMOTE_BASE_URL_SSH
 
 # Establish external dependencies
 declare -a deps=(gitbook ebook-convert)
+declare -a sources=(emerald-cli go-ethereum)
 
 [ -d $SOURCES ] || mkdir -p $SOURCES
 [ -d "$TARGET/html" ] || mkdir -p "$TARGET/html"
@@ -57,8 +58,22 @@ function build_docs() {
 
 function build() {
     PROJECT=$1
-    get_sources 'emerald-cli'
-    build_docs 'emerald-cli'
+
+	# Ensure project is whitelisted.
+	local match=0
+	for s in "${sources[@]}"; do
+		if [ "$s" == "$PROJECT" ]; then
+			match=1
+		fi
+	done
+	if [ $match -eq 0 ]; then
+		echo "Unknown source $PROJECT"
+		echo "Known projects are: ${sources[@]}"
+		exit 1
+	fi
+
+    get_sources "$PROJECT"
+    build_docs "$PROJECT"
 }
 
 function deploy() {
@@ -70,14 +85,24 @@ function deploy() {
 
 function usage() {
         echo "Use:"
-        echo " -b - build docs"
-        echo " -w - build website"
-        echo " -d - deploy"
+		echo "--https             : enable https git scheme instead of ssh default"
+        echo " -b <project>       : build docs for a project
+
+	Available projects are:
+
+		[${sources[@]}]
+
+	To build for multiple project, use '-b project1 -b project2'
+"
+        echo " -w                 : build website"
+        echo " -d                 : deploy"
 
 		echo "\
-	An example or two:
 
-		$ ./build.sh --https -b
+Examples:
+
+	$ ./build.sh --https -b emerald-cli
+	$ ./build.sh -b emerald-cli -b go-ethereum
 
 "
 }
@@ -117,11 +142,11 @@ case "$1" in
 		;;
 esac
 
-while getopts "bwd" opt; do
+while getopts "b:wd" opt; do
   case $opt in
     b)
-        echo "Build docs"
-        build 'emerald-cli'
+        echo "Build docs: $OPTARG"
+        build "$OPTARG"
         ;;
     w)
         echo "Build main website"
