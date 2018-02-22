@@ -46,7 +46,7 @@ function printprojects() {
 # Print help/usage in case of invalid use
 function usage() {
 		echo "Use:"
-		echo "--https             : enable https git scheme instead of ssh default"
+		echo "--https             : enable https git scheme instead of ssh default (must be arg \$1)"
 		echo " -B                 : build docs for all available projects
 
 	Available projects are: $(printprojects)
@@ -68,12 +68,6 @@ Examples:
 
 "
 }
-
-# Create source and target dirs if not exist
-[ -d "$SOURCES" ] || mkdir -p "$SOURCES"
-[ -d "$TARGET/html" ] || mkdir -p "$TARGET/html"
-[ -d "$TARGET/pdf" ] || mkdir -p "$TARGET/pdf"
-[ -d "$TARGET/epub" ] || mkdir -p "$TARGET/epub"
 
 function clone_or_pull_projects() {
 	local PROJECT="$1"
@@ -177,6 +171,12 @@ function deploy() {
 
 # Let the processing begin.
 
+# Create source and target dirs if not exist
+[ -d "$SOURCES" ] || mkdir -p "$SOURCES"
+[ -d "$TARGET/html" ] || mkdir -p "$TARGET/html"
+[ -d "$TARGET/pdf" ] || mkdir -p "$TARGET/pdf"
+[ -d "$TARGET/epub" ] || mkdir -p "$TARGET/epub"
+
 # Check for minimum arguments existing.
 if [ $# -eq 0 ]
   then
@@ -206,8 +206,7 @@ esac
 while getopts ":b:Bwd" opt; do
   case $opt in
 	b)
-		echo "\
--> Building docs for: $OPTARG"
+		echo "-> Building docs for: $OPTARG"
 		get_and_build "$OPTARG"
 		;;
 	B)
