@@ -147,21 +147,21 @@ case "$1" in
 		;;
 esac
 
-while getopts "b?wd" opt; do
+while getopts ":b:Bwd" opt; do
   case $opt in
     b)
-		if [ "$OPTARG" == "all" ] || [ "$OPTARG" == "" ]; then
-        	echo "Building all docs: ${sources[@]}"
-			for p in "${sources[@]}"; do
-				build "$p"
-			done
-			exit 0
-		else
-			echo "Building docs: $OPTARG"
-        	build "$OPTARG"
-		fi
-        ;;
-    w)
+		echo "\
+-> Building docs: $OPTARG"
+		build "$OPTARG"
+		;;
+	B)
+		echo "Building all docs: ${sources[@]}"
+		for p in "${sources[@]}"; do
+			echo "Building $p ..."
+			build "$p"
+		done
+		;;
+	w)
         echo "Build main website"
         node webpack.js --no-watch --minimize
         ;;
@@ -174,6 +174,6 @@ while getopts "b?wd" opt; do
         exit 1
         ;;
   esac
-  shift
+#   shift
 done
 
