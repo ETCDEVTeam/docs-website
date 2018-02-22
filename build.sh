@@ -3,6 +3,13 @@
 ME=$(pwd)
 SOURCES=$ME/_sources
 TARGET=$ME/_target
+# Allows to switch between ssh and https cloning/pulling.
+GIT_REMOTE_BASE_URL_SSH=git@github.com:
+GIT_REMOTE_BASE_URL_HTTPS=https://github.com/
+GIT_REMOTE_BASE_URL=$GIT_REMOTE_BASE_URL_SSH
+
+# Establish external dependencies
+declare -a deps=(gitbook ebook-convert)
 
 [ -d $SOURCES ] || mkdir -p $SOURCES
 [ -d "$TARGET/html" ] || mkdir -p "$TARGET/html"
@@ -13,8 +20,7 @@ set -e
 
 function get_sources() {
     PROJECT=$1
-    GIT=git@github.com:ETCDEVTeam/$PROJECT.git
-    echo "Get sources $GIT at $SOURCES"
+    echo "Get sources $GIT_REMOTE_BASE_URL""ETCDEVTeam/$PROJECT.git at $SOURCES"
 
     cd $SOURCES
     mkdir -p $TARGET/$PROJECT
@@ -23,7 +29,12 @@ function get_sources() {
         cd $PROJECT
         git pull origin master
     else
-        git clone $GIT
+        if git clone "$GIT_REMOTE_BASE_URL"ETCDEVTeam/"$PROJECT.git"; then
+			echo Got it.
+		else
+			echo "Failed to clone from ETCDEVTEAM, trying ethereumproject/..."
+			git clone "$GIT_REMOTE_BASE_URL"ethereumproject/"$PROJECT.git"
+		fi
     fi
 }
 
@@ -62,14 +73,49 @@ function usage() {
         echo " -b - build docs"
         echo " -w - build website"
         echo " -d - deploy"
+
+		echo "\
+	An example or two:
+
+		$ ./build.sh --https -b
+
+"
 }
 
+function depusage() {
+		echo "\
+To install missing dependencies, run
+
+	$ npm install -g $1
+
+Or, if missing 'ebook-convert' on MacOs...
+
+	$ brew cask install calibre
+
+"
+}
+
+# Check for minimum arguments existing.
 if [ $# -eq 0 ]
   then
     echo "No arguments supplied"
 	usage
 	exit 1
 fi
+
+# Ensure dependencies exist.
+for dep in "${deps[@]}"; do
+	hash "$dep" 2>/dev/null || { echo >&2 "I require $dep but it's not installed.  Aborting."; depusage "$dep"; exit 1; }
+done
+
+# Parse git scheme.
+case "$1" in
+	--https)
+		echo "Using https git scheme"
+		GIT_REMOTE_BASE_URL=$GIT_REMOTE_BASE_URL_HTTPS
+		shift
+		;;
+esac
 
 while getopts "bwd" opt; do
   case $opt in
