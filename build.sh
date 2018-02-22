@@ -57,6 +57,20 @@ function deploy() {
     gsutil -m setmeta -h "Cache-Control:public, max-age=900" -r "gs://$BUCKET"
 }
 
+function usage() {
+        echo "Use:"
+        echo " -b - build docs"
+        echo " -w - build website"
+        echo " -d - deploy"
+}
+
+if [ $# -eq 0 ]
+  then
+    echo "No arguments supplied"
+	usage
+	exit 1
+fi
+
 while getopts "bwd" opt; do
   case $opt in
     b)
@@ -72,10 +86,7 @@ while getopts "bwd" opt; do
         deploy
         ;;
     *)  echo "Unknown $1"
-        echo "Use:"
-        echo " -b - build docs"
-        echo " -w - build website"
-        echo " -d - deploy"
+		usage
         exit 1
         ;;
   esac
