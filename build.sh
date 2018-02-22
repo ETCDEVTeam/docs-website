@@ -86,18 +86,14 @@ function deploy() {
 function usage() {
         echo "Use:"
 		echo "--https             : enable https git scheme instead of ssh default"
-        echo " -b <project>|all|  : build docs for a single project or all
+		echo " -B                 : build docs for all available projects
 
-	Available projects are:
+	Available projects are: [${sources[@]}]
 
-		[${sources[@]}]
+"
+        echo " -b <project>       : build docs for a single project or multiple
 
-	To build for specific single or multiple project, use '-b project1 -b project2'
-
-	To build for all projects, either:
-
-		- omit the project project argument:  '-b'
-		- use 'all':                          '-b all'
+	To build for specific single or multiple projects, use '-b project1 -b project2'
 "
         echo " -w                 : build website"
         echo " -d                 : deploy"
