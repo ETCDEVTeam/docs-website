@@ -86,13 +86,18 @@ function deploy() {
 function usage() {
         echo "Use:"
 		echo "--https             : enable https git scheme instead of ssh default"
-        echo " -b <project>       : build docs for a project
+        echo " -b <project>|all|  : build docs for a single project or all
 
 	Available projects are:
 
 		[${sources[@]}]
 
-	To build for multiple project, use '-b project1 -b project2'
+	To build for specific single or multiple project, use '-b project1 -b project2'
+
+	To build for all projects, either:
+
+		- omit the project project argument:  '-b'
+		- use 'all':                          '-b all'
 "
         echo " -w                 : build website"
         echo " -d                 : deploy"
@@ -142,11 +147,19 @@ case "$1" in
 		;;
 esac
 
-while getopts "b:wd" opt; do
+while getopts "b?wd" opt; do
   case $opt in
     b)
-        echo "Build docs: $OPTARG"
-        build "$OPTARG"
+		if [ "$OPTARG" == "all" ] || [ "$OPTARG" == "" ]; then
+        	echo "Building all docs: ${sources[@]}"
+			for p in "${sources[@]}"; do
+				build "$p"
+			done
+			exit 0
+		else
+			echo "Building docs: $OPTARG"
+        	build "$OPTARG"
+		fi
         ;;
     w)
         echo "Build main website"
