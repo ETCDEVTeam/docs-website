@@ -96,7 +96,7 @@ var config = {
     }
 };
 
-var watch = process.argv.indexOf('--no-watch') < 0;
+var watch = process.argv.indexOf('--watch') >= 0;
 var minimize = process.argv.indexOf('--minimize') >= 0;
 var compiler = webpack(config);
 

@@ -30,8 +30,9 @@ Or, if missing 'ebook-convert' on MacOs...
 # Whitelist projects
 declare -a projects=(
 	ETCDEVTeam/emerald-cli
-	ethereumproject/go-ethereum
-	whilei/go-ethereum # just for dev purposes
+	ETCDEVTeam/emerald-js
+	#ethereumproject/go-ethereum
+	#whilei/go-ethereum # just for dev purposes
 )
 function printprojects() {
 	local out="
@@ -203,7 +204,7 @@ case "$1" in
 esac
 
 # Parse options.
-while getopts ":b:Bwd" opt; do
+while getopts ":b:Bwds" opt; do
   case $opt in
 	b)
 		echo "-> Building docs for: $OPTARG"
@@ -218,11 +219,16 @@ while getopts ":b:Bwd" opt; do
 		;;
 	w)
 		echo "Build main website"
-		node webpack.js --no-watch --minimize
+		node webpack.js --minimize
 		;;
 	d)
 		echo "Deploy docs to https://docs.etcdevteam.com"
 		deploy
+		;;
+        s)
+		echo "Serve local website. Please open http://localhost:8000 to view generated website"
+		cd _target
+		python -m SimpleHTTPServer
 		;;
 	*)  echo "Unknown $1"
 		usage

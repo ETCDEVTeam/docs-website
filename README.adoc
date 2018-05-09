@@ -34,13 +34,12 @@ Build documentation:
 
 Build homepage:
 ```
-node webpack.js
+./build.sh -w
 ```
 
 View generted documentation:
 ```
-cd _target
-python -m SimpleHTTPServer
+./build.sh -s
 ```
 
 Open http://localhost:8000/

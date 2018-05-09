@@ -7,6 +7,14 @@
       "links": {
         "github": "https://github.com/etcdevteam/emerald-cli"
       }
+    },
+    {
+      "id": "emerald-js",
+      "title": "Emerald JS",
+      "description": "Javascript utility library and a framework to build Dapps on Ethereum Classic",
+      "links": {
+        "github": "https://github.com/etcdevteam/emerald-js"
+      }
     }
   ]
 }
