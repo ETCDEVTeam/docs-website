@@ -1,0 +1,47 @@
+ETCDEV Documentation website generator
+======================================
+
+
+Based on Gitbook, downloads all projects in local directory (`_sources`) and call Gitbook geenrator for each of 
+them, putting result to `_target`. In addition to that generates home page for the websites.
+
+# Configuration
+
+To add a new project edit `build.sh` and add a full name of the project into the following block:
+```
+# Whitelist projects
+declare -a projects=(
+        ETCDEVTeam/emerald-cli
+        ETCDEVTeam/emerald-js
+        #ethereumproject/go-ethereum
+        #whilei/go-ethereum # just for dev purposes
+)
+```
+
+Edit `website/data.json` to specify details of the project to put into home page.
+
+# Run
+
+Install modules:
+```
+npm install
+```
+
+Build documentation:
+```
+./build.sh -B
+```
+
+Build homepage:
+```
+node webpack.js
+```
+
+View generted documentation:
+```
+cd _target
+python -m SimpleHTTPServer
+```
+
+Open http://localhost:8000/
+
