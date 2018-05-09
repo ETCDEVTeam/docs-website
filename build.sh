@@ -29,8 +29,8 @@ Or, if missing 'ebook-convert' on MacOs...
 
 # Whitelist projects
 declare -a projects=(
-	ETCDEVTeam/emerald-cli 
-	ethereumproject/go-ethereum 
+	ETCDEVTeam/emerald-cli
+	ethereumproject/go-ethereum
 	whilei/go-ethereum # just for dev purposes
 )
 function printprojects() {
@@ -76,17 +76,17 @@ function clone_or_pull_projects() {
 
 	# If sources project dir exists, git pull update
 	if [ -d "$SOURCES/$PROJECT" ]; then
-		if git -C "$SOURCES/$PROJECT" pull origin master; then
+		if git --work-tree "$SOURCES/$PROJECT" --git-dir "$SOURCES/$PROJECT/.git" pull origin master; then
 			echo Success.
 		else
 			# There was an error... perhaps something like git remote name has changed...
 			echo Could not pull from origin master for existing repo "$SOURCES/$PROJECT".
-	
+
 			echo Removing "$SOURCES/$PROJECT"
 			rm -rf "$SOURCES/$PROJECT"
-	
+
 			# Make just the owner namespace dir (since we'll clone)
-			mkdir -p "$SOURCES/$PROJECT/.." 
+			mkdir -p "$SOURCES/$PROJECT/.."
 
 			cd "$SOURCES/$PROJECT/.." # owner namespace, eg. $SOURCES/ethereumproject/
 			if git clone "$GIT_REMOTE_BASE_URL$PROJECT.git"; then
@@ -120,7 +120,7 @@ function build_docs() {
 		echo "Missing required $SOURCES/$PROJECT/docs/README.(md|adoc) file. Gitbook cannot continue."
 		exit 1
 	fi
-	
+
 	# Get just the repo name, splitting on '/' from the namespace prefix
 	IFS='/' read -ra ARR <<< "$PROJECT"
 	local REPONAME="${ARR[1]}"
@@ -139,7 +139,7 @@ function build_docs() {
 	rm -rf "$TARGET/epub/$REPONAME.epub"
 	gitbook epub "$SOURCES/$PROJECT/." "$TARGET/epub/$REPONAME.epub"
 
-	git -C "$SOURCES/$PROJECT" checkout "$SOURCES/$PROJECT/book.json"
+	git --work-tree "$SOURCES/$PROJECT" --git-dir "$SOURCES/$PROJECT/.git" checkout "$SOURCES/$PROJECT/book.json"
 }
 
 function get_and_build() {
